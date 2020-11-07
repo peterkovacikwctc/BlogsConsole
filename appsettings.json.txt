@@ -1,4 +1,5 @@
-# The following file should be add to the project as appsettings.json
+# The following file should be added to the project as appsettings.json
+# with personal information inserted into the template below
 
 {
   "BloggingContext": {
