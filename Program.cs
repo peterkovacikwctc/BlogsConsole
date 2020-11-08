@@ -25,17 +25,20 @@ namespace BlogsConsole
                     display.menu();
                     menuChoice = Console.ReadLine();
                     Console.WriteLine("");
+                    var query = db.Blogs.OrderBy(b => b.BlogId);
                     
                     switch(menuChoice) 
                     {
                         case "1":
                             // Display all Blogs from the database
-                            var query = db.Blogs.OrderBy(b => b.Name);
+                            int maxBlogNumber = db.Blogs.Max(b => b.BlogId);
+                            
+                            // number of blog (singular)/blogs (plural or zero) in database
+                            display.headerBlogNames(maxBlogNumber);
 
-                            Console.WriteLine("All blogs in the database:");
                             foreach (var item in query)
                             {
-                                Console.WriteLine(item.Name);
+                                Console.WriteLine($"{item.BlogId}) {item.Name}");
                             }
                             break;
 
@@ -51,7 +54,39 @@ namespace BlogsConsole
                             break;
 
                         case "3":
-                            // code block
+                            // prompt user to select blog 
+                            Console.WriteLine("Select a blog to view its posts.");
+                            
+                            // if query is null, message: no Blogs, then break switch
+
+                            // if query is not null
+                            foreach (var item in query)
+                            {
+                                Console.WriteLine($"{item.BlogId}) {item.Name}");
+
+                            }
+                            string blogIdChoice = Console.ReadLine();
+
+                            // enter post details
+                            Post post = new Post();
+                            
+                            // blog ID of post taken from selection
+                            post.BlogId = int.Parse(blogIdChoice);
+                            
+                            // title of post
+                            Console.WriteLine("Enter the title of the post");
+                            string postTitle = Console.ReadLine();
+                            
+                            // content of post
+                            Console.WriteLine("Enter the content of the post");
+                            string postConsole = Console.ReadLine();
+
+                            // saved to Posts table
+                            db.AddPost(post);
+                            logger.Info("Post added - {name}", postTitle);
+\
+                            // *** remember to handle user errors
+
                             break;
 
                         case "4":

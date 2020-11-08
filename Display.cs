@@ -22,5 +22,14 @@ namespace BlogsConsole
             Console.WriteLine($"{menuChoice} is not a valid response.");
         }
 
+        public void headerBlogNames(int numberBlogs) {
+            if (numberBlogs == 1)
+                Console.WriteLine($"1 blog in the database:");
+            else if (numberBlogs > 1)
+                Console.WriteLine($"{numberBlogs} blogs in the database:");
+            else
+                Console.WriteLine($"0 blogs in the database:");
+        }
+
     }
 }

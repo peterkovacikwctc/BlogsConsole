@@ -14,6 +14,24 @@ namespace BlogsConsole
             this.SaveChanges();
         }
 
+        public void DeleteBlog(Blog blog)
+        {
+            this.Remove(blog);
+            this.SaveChanges();
+        }
+
+        public void AddPost(Post post)
+        {
+            this.Add(post);
+            this.SaveChanges();
+        }
+
+        public void DeletePost(Post post)
+        {
+            this.Remove(post);
+            this.SaveChanges();
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             IConfiguration config = new ConfigurationBuilder()

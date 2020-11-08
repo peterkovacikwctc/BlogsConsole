@@ -1,3 +1,8 @@
+using System;
+using NLog.Web;
+using System.IO;
+using System.Linq;
+
 namespace BlogsConsole
 {
     public class Post
