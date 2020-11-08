@@ -26,6 +26,7 @@ namespace BlogsConsole
                     menuChoice = Console.ReadLine();
                     Console.WriteLine("");
                     var query = db.Blogs.OrderBy(b => b.BlogId);
+                    var postQuery = db.Posts.OrderBy(p => p.PostId);
                     
                     switch(menuChoice) 
                     {
@@ -65,32 +66,80 @@ namespace BlogsConsole
                                 Console.WriteLine($"{item.BlogId}) {item.Name}");
 
                             }
-                            string blogIdChoice = Console.ReadLine();
+                            int blogIdChoice = int.Parse(Console.ReadLine());
 
                             // enter post details
                             Post post = new Post();
                             
                             // blog ID of post taken from selection
-                            post.BlogId = int.Parse(blogIdChoice);
+                            post.BlogId = blogIdChoice;
                             
                             // title of post
-                            Console.WriteLine("Enter the title of the post");
-                            string postTitle = Console.ReadLine();
+                            Console.WriteLine("Enter the title of the post: ");
+                            post.Title = Console.ReadLine();
                             
                             // content of post
-                            Console.WriteLine("Enter the content of the post");
-                            string postConsole = Console.ReadLine();
+                            Console.WriteLine("Enter the content of the post: ");
+                            post.Content = Console.ReadLine();
+
+                            
 
                             // saved to Posts table
                             db.AddPost(post);
-                            logger.Info("Post added - {name}", postTitle);
-\
+                            logger.Info("Post added - {name}", post.Title);
+
                             // *** remember to handle user errors
 
                             break;
 
                         case "4":
-                            // code block
+                            // select posts from all blogs or particular blogs    
+                            Console.WriteLine("Select which posts to display: ");
+                            Console.WriteLine("0) Posts from all blogs");
+                            // display each blog
+                            foreach (var item in query)
+                            {
+                                Console.WriteLine($"{item.BlogId}) Posts from {item.Name}");
+
+                            }
+                            // user selects choice
+                            blogIdChoice = int.Parse(Console.ReadLine());
+                            Console.WriteLine("");
+
+                            // determine number of blogs (range of valid answers)
+                            maxBlogNumber = db.Blogs.Max(b => b.BlogId);
+                            
+                            // 0 - display all posts
+                            if (blogIdChoice == 0) {
+                                
+                                foreach (var item in postQuery)
+                                {
+                                    Console.WriteLine($"Blog: {item.Blog.Name}");
+                                    Console.WriteLine($"Title: {item.Title}");
+                                    Console.WriteLine($"Content: {item.Content}\n");
+                                }
+                            }
+
+                            // choose particular post (1 - max PostID)
+                            else if (blogIdChoice > 0 && blogIdChoice <= maxBlogNumber) {
+                                
+                                foreach (var item in postQuery)
+                                {
+                                    // only display post items corresponding to correct Blog Id
+                                    if (item.BlogId == blogIdChoice) {
+                                        Console.WriteLine($"Blog: {item.Blog.Name}");
+                                        Console.WriteLine($"Title: {item.Title}");
+                                        Console.WriteLine($"Content: {item.Content}\n");
+                                    }
+                                }
+                            }
+                            // choice is outside of range
+                            else {
+                                Console.WriteLine("Invalid input. Choose an integer from the menu.");
+                            }
+
+
+
                             break;
 
                         case "q":
