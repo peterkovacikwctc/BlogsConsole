@@ -21,7 +21,6 @@ namespace BlogsConsole
 
                 do {
                     // display menu
-                    
                     display.menu();
                     menuChoice = Console.ReadLine();
                     Console.WriteLine("");
@@ -38,8 +37,6 @@ namespace BlogsConsole
 
                     switch(menuChoice) 
                     {
-                        
-
                         case "1":
                             // Display all Blogs from the database
                             int maxBlogNumber = db.Blogs.Max(b => b.BlogId);
@@ -138,7 +135,6 @@ namespace BlogsConsole
                             // determine number of blogs (range of valid answers)
                             maxBlogNumber = db.Blogs.Max(b => b.BlogId);
 
-                            
                             do {
                                 // select posts from all blogs or from particular blogs    
                                 Console.WriteLine("Select which posts to display: ");
@@ -173,7 +169,6 @@ namespace BlogsConsole
                                 }
                             } while (repeat == true);
 
-                            //blogIdChoice = int.Parse(Console.ReadLine());
                             Console.WriteLine(""); // blank line for formatting
                             
                             // 0 - display all posts
@@ -193,10 +188,10 @@ namespace BlogsConsole
                                 }
                             }
 
-                            // choose particular post (1 - max PostID)
+                            // post(s) for particular blog in list
                             else if (blogIdChoice > 0 && blogIdChoice <= maxBlogNumber) {
                                 
-                                int postCounter = 0;
+                                int postCounter = 0; // used to display '0 posts' if nothing added
                                 foreach (var item in postQuery)
                                 {
                                     // only display post items corresponding to correct Blog Id
@@ -209,7 +204,7 @@ namespace BlogsConsole
                                     
                                 }
                                 if (postCounter == 0)
-                                    Console.WriteLine($"0 posts returned");
+                                    Console.WriteLine("0 posts returned");
                             }
                             break;
 
