@@ -55,8 +55,16 @@ namespace BlogsConsole
 
                         case "2":
                             // Create and save a new Blog
-                            Console.Write("Enter a name for a new Blog: ");
-                            var name = Console.ReadLine();
+                            string name;
+                            do {
+                                Console.Write("Enter a name for a new Blog: ");
+                                name = Console.ReadLine();
+
+                                // error: blank name
+                                if (name == "") {
+                                    Console.WriteLine("The blog name cannot be blank.\n");
+                                }
+                            } while (name == "");
 
                             var blog = new Blog { Name = name };
 
@@ -172,7 +180,7 @@ namespace BlogsConsole
                             if (blogIdChoice == 0) {
                                 
                                 if (postQuery == null) {
-                                    Console.WriteLine("There are no posts.");
+                                    Console.WriteLine("0 posts returned.");
                                 }
 
                                 else {
@@ -201,7 +209,7 @@ namespace BlogsConsole
                                     
                                 }
                                 if (postCounter == 0)
-                                    Console.WriteLine($"0 posts returned\n");
+                                    Console.WriteLine($"0 posts returned");
                             }
                             break;
 

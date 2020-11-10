@@ -15,7 +15,7 @@ namespace BlogsConsole
         }
 
         public void quit() {
-            Console.WriteLine("Goodbye!");
+            Console.WriteLine("Goodbye!\n");
         }
 
         public void defaultMessage(string menuChoice) {
@@ -28,7 +28,7 @@ namespace BlogsConsole
             else if (numberBlogs > 1)
                 Console.WriteLine($"{numberBlogs} blogs in the database:");
             else
-                Console.WriteLine($"0 blogs in the database:");
+                Console.WriteLine($"0 blogs in the database.");
         }
 
     }
