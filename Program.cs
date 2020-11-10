@@ -28,8 +28,18 @@ namespace BlogsConsole
                     var query = db.Blogs.OrderBy(b => b.BlogId);
                     var postQuery = db.Posts.OrderBy(p => p.PostId);
                     
+                    // string variable for input (convert to integer)
+                    string input;
+
+                    // variables
+                    int blogIdChoice;
+                    bool repeat;
+                        
+
                     switch(menuChoice) 
                     {
+                        
+
                         case "1":
                             // Display all Blogs from the database
                             int maxBlogNumber = db.Blogs.Max(b => b.BlogId);
@@ -55,56 +65,82 @@ namespace BlogsConsole
                             break;
 
                         case "3":
-                            // prompt user to select blog 
-                            Console.WriteLine("Select a blog to view its posts.");
                             
-                            // if query is null, message: no Blogs, then break switch
-
-                            // if query is not null
-                            foreach (var item in query)
-                            {
-                                Console.WriteLine($"{item.BlogId}) {item.Name}");
-
+                            if (query == null) {
+                                Console.WriteLine("There are no blogs.");
+                                Console.WriteLine("Choose option 2 to add a blog.\n");
                             }
-                            int blogIdChoice = int.Parse(Console.ReadLine());
-
-                            // enter post details
-                            Post post = new Post();
                             
-                            // blog ID of post taken from selection
-                            post.BlogId = blogIdChoice;
-                            
-                            // title of post
-                            Console.WriteLine("Enter the title of the post: ");
-                            post.Title = Console.ReadLine();
-                            
-                            // content of post
-                            Console.WriteLine("Enter the content of the post: ");
-                            post.Content = Console.ReadLine();
+                            else {
+                                
+                                do {
+                                    // prompt user to select blog 
+                                    Console.WriteLine("Select a blog to view its posts.");
+                                    
+                                    // if query is not null
+                                    foreach (var item in query)
+                                    {
+                                        Console.WriteLine($"{item.BlogId}) {item.Name}");
 
-                            
+                                    }
+                                    input = Console.ReadLine();
+                                    try {
+                                        blogIdChoice = int.Parse(input);
+                                        repeat = false;
+                                    }
+                                    // error: not an integer
+                                    catch {
+                                        Console.WriteLine("\nInvalid choice.");
+                                        Console.WriteLine("Please enter the number of one of the blogs.\n");
+                                        blogIdChoice = -99;
+                                        repeat = true;
+                                    }
+                                    // error: integer is out of range
+                                    maxBlogNumber = db.Blogs.Max(b => b.BlogId);
+                                    if ((blogIdChoice < 1 || blogIdChoice > maxBlogNumber) && blogIdChoice != -99) { 
+                                        Console.WriteLine("\nInvalid choice.");
+                                        Console.WriteLine("Please enter the number of one of the blogs.\n");
+                                        repeat = true;
+                                    }
+                                } while (repeat == true); // repeat loop if either error occurs (not an integer or out of range)
+                                
+                                // enter post details
+                                Post post = new Post();
+                                
+                                // blog ID of post taken from selection
+                                post.BlogId = blogIdChoice;
+                                
+                                // title of post
+                                Console.WriteLine("Enter the title of the post: ");
+                                post.Title = Console.ReadLine();
+                                
+                                // content of post
+                                Console.WriteLine("Enter the content of the post: ");
+                                post.Content = Console.ReadLine();
 
-                            // saved to Posts table
-                            db.AddPost(post);
-                            logger.Info("Post added - {name}", post.Title);
-
-                            // *** remember to handle user errors
+                                // save to Posts table
+                                db.AddPost(post);
+                                logger.Info("Post added - {name}", post.Title);
+                            }
 
                             break;
 
                         case "4":
-                            // select posts from all blogs or particular blogs    
+                            
+                            // select posts from all blogs or from particular blogs    
                             Console.WriteLine("Select which posts to display: ");
+                            
                             Console.WriteLine("0) Posts from all blogs");
-                            // display each blog
+                            // display id number and name for each blog
                             foreach (var item in query)
                             {
                                 Console.WriteLine($"{item.BlogId}) Posts from {item.Name}");
 
                             }
+                            
                             // user selects choice
                             blogIdChoice = int.Parse(Console.ReadLine());
-                            Console.WriteLine("");
+                            Console.WriteLine(""); // blank line for formatting
 
                             // determine number of blogs (range of valid answers)
                             maxBlogNumber = db.Blogs.Max(b => b.BlogId);
@@ -133,13 +169,10 @@ namespace BlogsConsole
                                     }
                                 }
                             }
-                            // choice is outside of range
+                            // if choice is outside of range, it is invalid
                             else {
                                 Console.WriteLine("Invalid input. Choose an integer from the menu.");
                             }
-
-
-
                             break;
 
                         case "q":
